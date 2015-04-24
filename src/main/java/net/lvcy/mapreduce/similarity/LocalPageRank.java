@@ -82,7 +82,13 @@ public class LocalPageRank {
 		@Override
 		protected void reduce(Text key, Iterable<Text> values,Reducer<Text, Text, Text, Text>.Context context)throws IOException, InterruptedException {
 			for (Text value : values) {
-				context.write(key, value);
+				String[] ns=value.toString().split("\t");
+				if(Double.parseDouble(ns[1])>0.000){
+					double sim=-1/Double.parseDouble(ns[1]);
+					Text v=new Text(ns[0]+"\t"+String.valueOf(sim));
+					System.out.println("Similarity: "+key.toString()+"\t"+v.toString());
+					context.write(key, v);
+				}
 			}
 		}
 	}

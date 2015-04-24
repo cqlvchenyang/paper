@@ -8,7 +8,7 @@ public class JedisUtils {
 	private JedisUtils(){};
 	public static Jedis getJedis(){
 		if(jedis==null){
-			jedis=new Jedis("10.0.0.16", 6379);
+			jedis=new Jedis("10.0.0.21", 6379);
 		}
 		return jedis;
 	}
