@@ -65,6 +65,9 @@ public class Availability {
 					}
 				}
 				edges.get(i).setAvailability(aik);
+				//¼ÆËã×èÄáÏµÊı
+				//edges.get(i).setResponsibility((1-0.5)*edges.get(i).getResponsibility()+0.5*edges.get(i).getResponsibility());
+				//edges.get(i).setAvailability((1-0.5)*edges.get(i).getAvailability()+0.5*edges.get(i).getAvailability());
 				System.out.println("Availability Reducer: "+edges.get(i));
 				context.write(new Text(edges.get(i).toString()), "");
 			}

@@ -43,7 +43,8 @@ public class Responsibility {
 				
 				double max=getMax(edges, i);
 				double rik=edges.get(i).getSimilarity()-max;
-				edges.get(i).setResponsibility(rik);
+				//¼ÆËã×èÄáÏµÊı
+				edges.get(i).setResponsibility((1-0.5)*rik+0.5*edges.get(i).getResponsibility());
 				System.out.println("Responsibility Reducer: "+edges.get(i).toString());
 				context.write(new Text(edges.get(i).toString()), new Text());
 			}
