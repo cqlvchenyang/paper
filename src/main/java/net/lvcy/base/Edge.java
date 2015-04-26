@@ -4,6 +4,9 @@ import java.io.DataInput;
 import java.io.DataOutput;
 import java.io.IOException;
 
+import org.apache.hadoop.hbase.client.Result;
+import org.apache.hadoop.hbase.io.ImmutableBytesWritable;
+import org.apache.hadoop.hbase.util.Bytes;
 import org.apache.hadoop.io.Text;
 import org.apache.hadoop.io.Writable;
 
@@ -25,6 +28,14 @@ public class Edge implements Writable{
 		similarity=Double.parseDouble(lines[2]);
 		availability=lines.length>3?Double.parseDouble(lines[3]):0;
 		responsibility=lines.length>4?Double.parseDouble(lines[4]):0;
+	}
+	public Edge(ImmutableBytesWritable key,Result value){
+		String[] rowkeyArray=Bytes.toString(key.get()).split("-");
+		this.nodeOne=rowkeyArray[0];
+		this.nodeTwo=rowkeyArray[1];
+		this.similarity=Long.parseLong(Bytes.toString(value.getValue("similarity".getBytes(), "".getBytes())));
+		this.availability=Long.parseLong(Bytes.toString(value.getValue("avaliability".getBytes(), "".getBytes())));
+		this.responsibility=Long.parseLong(Bytes.toString(value.getValue("responsibility".getBytes(), "".getBytes())));
 	}
 	public double getAvailability() {
 		return availability;
