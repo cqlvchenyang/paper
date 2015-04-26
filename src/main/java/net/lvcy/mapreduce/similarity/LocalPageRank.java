@@ -15,6 +15,7 @@ import net.lvcy.common.JedisUtils;
 
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.Path;
+import org.apache.hadoop.hbase.HBaseConfiguration;
 import org.apache.hadoop.hbase.client.Mutation;
 import org.apache.hadoop.hbase.client.Put;
 import org.apache.hadoop.hbase.io.ImmutableBytesWritable;
@@ -102,7 +103,7 @@ public class LocalPageRank {
 				Put put=new Put(rowkey.getBytes());
 				long ts=System.currentTimeMillis();
 				put.addImmutable("similarity".getBytes(), "".getBytes(), ts, String.valueOf(sim).getBytes());
-				put.addImmutable("avaliability".getBytes(), "".getBytes(), ts, String.valueOf(0.0).getBytes());
+				put.addImmutable("availability".getBytes(), "".getBytes(), ts, String.valueOf(0.0).getBytes());
 				put.addImmutable("responsibility".getBytes(), "".getBytes(), ts, String.valueOf(0.0).getBytes());
 				context.write(null,put);
 			}
@@ -136,7 +137,7 @@ public class LocalPageRank {
 		}
 	}*/
 	public static void main(String[] args) throws IOException, ClassNotFoundException, InterruptedException {
-		Configuration configuration=new Configuration();
+		Configuration configuration=HBaseConfiguration.create();
 		Job job=Job.getInstance(configuration, "Local PageRank");
 		job.setJarByClass(LocalPageRank.class);
 		job.setMapperClass(LPRMapper.class);

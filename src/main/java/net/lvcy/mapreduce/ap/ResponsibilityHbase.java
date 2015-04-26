@@ -8,7 +8,6 @@ import java.util.List;
 import net.lvcy.base.Edge;
 
 import org.apache.hadoop.conf.Configuration;
-import org.apache.hadoop.fs.Path;
 import org.apache.hadoop.hbase.HBaseConfiguration;
 import org.apache.hadoop.hbase.client.Mutation;
 import org.apache.hadoop.hbase.client.Put;
@@ -22,8 +21,6 @@ import org.apache.hadoop.io.Text;
 import org.apache.hadoop.mapreduce.Job;
 import org.apache.hadoop.mapreduce.Mapper;
 import org.apache.hadoop.mapreduce.Reducer;
-import org.apache.hadoop.mapreduce.lib.input.FileInputFormat;
-import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;
 
 public class ResponsibilityHbase {
 	public static class RHMapper extends TableMapper<Text, Edge>{
@@ -74,22 +71,10 @@ public class ResponsibilityHbase {
 		}
 	}
 	public static void main(String[] args) throws IOException, ClassNotFoundException, InterruptedException {
-		/*Configuration configuration=new Configuration();
-		Job job=Job.getInstance(configuration,"Responsibility");
-		job.setJarByClass(Responsibility.class);
-		job.setMapperClass(RMapper.class);
-		job.setReducerClass(RReducer.class);
-		
-		job.setMapOutputKeyClass(Text.class);
-		job.setMapOutputValueClass(Edge.class);
-		job.setOutputKeyClass(Text.class);
-		job.setOutputValueClass(Text.class);
-		
-		FileInputFormat.addInputPath(job, new Path(args[0]));
-		FileOutputFormat.setOutputPath(job, new Path(args[1]));*/
 		
 		Configuration configuration=HBaseConfiguration.create();
 		Job job=Job.getInstance(configuration, "Responsibility Hbase");
+		job.setJarByClass(AvailabilityHbase.class);
 		
 		Scan scan=new Scan();
 		scan.setCaching(500);
@@ -98,6 +83,7 @@ public class ResponsibilityHbase {
 		TableMapReduceUtil.initTableMapperJob("ap", scan, RHMapper.class, Text.class, Text.class, job);
 		TableMapReduceUtil.initTableReducerJob("ap", RHReducer.class, job);
 		job.setNumReduceTasks(1);
+		
 		System.exit(job.waitForCompletion(true)?0:1);
 	}
 }
